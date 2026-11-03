@@ -1,0 +1,6 @@
+Flask>=3.0
+Pillow>=10.0
+numpy>=1.26
+tensorflow>=2.15
+matplotlib>=3.8
+scikit-learn>=1.4

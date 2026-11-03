@@ -1,0 +1,126 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ColorCraft | AI Color Recognition</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="#"><span class="brand-mark">◈</span> ColorCraft</a>
+    <span class="nav-tag">BAI701 · DEEP LEARNING LAB</span>
+  </nav>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow"><span class="pulse"></span> COMPUTER VISION · CNN</div>
+      <h1>See the color.<br><span>Understand the image.</span></h1>
+      <p class="lead">Upload an image and let a Convolutional Neural Network predict its dominant color category.</p>
+      <div class="class-pills">
+        <span>RED</span><span>ORANGE</span><span>YELLOW</span><span>GREEN</span>
+        <span>BLUE</span><span>PURPLE</span><span>BLACK</span><span>WHITE</span>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="panel upload-panel">
+        <div class="panel-head">
+          <div><span class="step">01</span><h2>Upload image</h2></div>
+          <span class="small-label">JPG · PNG · WEBP</span>
+        </div>
+        <form id="upload-form">
+          <label class="dropzone" for="image-input" id="dropzone">
+            <div class="upload-icon">↑</div>
+            <strong>Drop your image here</strong>
+            <span>or click to browse your files</span>
+            <input id="image-input" name="image" type="file"
+                   accept="image/png,image/jpeg,image/webp" hidden>
+          </label>
+          <div id="preview-wrap" class="preview-wrap hidden">
+            <img id="preview" alt="Selected image preview">
+            <div><strong id="filename"></strong><span id="filesize"></span></div>
+            <button type="button" class="text-button" id="remove-image">Remove</button>
+          </div>
+          <button id="analyze-btn" class="primary" type="submit" disabled>
+            <span>Analyze color</span><span>↗</span>
+          </button>
+          <p class="micro">The image is analyzed by the local CNN and color-analysis functions.</p>
+        </form>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-head">
+          <div><span class="step">02</span><h2>Prediction</h2></div>
+          <span class="status {{ 'ready' if model_ready else 'not-ready' }}">
+            <i></i>{{ 'MODEL READY' if model_ready else 'MODEL NOT TRAINED' }}
+          </span>
+        </div>
+        <div id="empty-state" class="empty-state">
+          <div class="target-icon">◎</div>
+          <h3>Your result will appear here</h3>
+          <p>Choose an image to see the predicted color and confidence score.</p>
+          <div class="spectrum"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div id="result-state" class="result-state hidden">
+          <div id="color-swatch" class="color-swatch"></div>
+          <div class="result-kicker">PREDICTED COLOR</div>
+          <h3 id="result-label">Blue</h3>
+          <div class="confidence-row"><span>Model confidence</span><strong id="confidence">0%</strong></div>
+          <div class="meter"><span id="meter-fill"></span></div>
+          <div class="top-title">Top predictions</div>
+          <div id="top3" class="top3"></div>
+        </div>
+        <div id="error-box" class="error-box hidden" role="alert"></div>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="color-analysis">
+      <div class="panel-head">
+        <div><span class="step">03</span><h2>Dominant colors</h2></div>
+        <span class="small-label">IMAGE COLOR ANALYSIS</span>
+      </div>
+      <p class="section-intro">The most prominent colors extracted from your uploaded image.</p>
+      <div id="dominant-colors" class="color-grid">
+        <p class="placeholder">Analyze an image to discover its dominant colors.</p>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="palette-section">
+      <div class="panel-head">
+        <div><span class="step">04</span><h2>Generated color palette</h2></div>
+        <button id="copy-palette" class="secondary" type="button" disabled>Copy HEX codes</button>
+      </div>
+      <p class="section-intro">A five-color palette created from your image colors.</p>
+      <div id="color-palette" class="palette-grid">
+        <p class="placeholder">Your palette will appear here after analysis.</p>
+      </div>
+    </section>
+
+    <section class="panel feature-panel" id="history-section">
+      <div class="panel-head">
+        <div><span class="step">05</span><h2>Prediction history</h2></div>
+        <button id="export-csv" class="secondary" type="button">Export CSV ↓</button>
+      </div>
+      <p class="section-intro">Your recent predictions during this running session.</p>
+      <div id="history-list" class="history-list">
+        <p class="placeholder">Your analyzed images will be listed here.</p>
+      </div>
+    </section>
+
+    <section class="process">
+      <div><span class="step">01 / PREPROCESS</span><h3>Normalize pixels</h3><p>Resize to 96 × 96 and scale RGB values to 0–1.</p></div>
+      <div><span class="step">02 / CNN</span><h3>Extract features</h3><p>Convolution and pooling layers learn visual color patterns.</p></div>
+      <div><span class="step">03 / PREDICT</span><h3>Rank categories</h3><p>Softmax scores rank the model's eight color categories.</p></div>
+    </section>
+
+    <footer>
+      <span>COLORCRAFT / BAI701 MINI PROJECT</span>
+      <span>Educational prototype · Results depend on training data</span>
+    </footer>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
